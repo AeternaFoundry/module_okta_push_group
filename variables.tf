@@ -21,5 +21,13 @@ EOT
     target_group_id                = optional(string)
     target_group_name              = optional(string)
   }))
+  validation {
+    condition = alltrue([
+      for k, v in var.push_groups : (
+        v.status == null || (contains(["ACTIVE", "INACTIVE"], v.status))
+      )
+    ])
+    error_message = "must be one of: \"ACTIVE\", \"INACTIVE\""
+  }
 }
 
